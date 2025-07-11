@@ -1,26 +1,41 @@
 version: "3"
 
 tasks:
-  default:
+  openblas-config:
     cmds:
-      - task: config
-      - task: build
+      - mkdir -p openblas-build
+      - cmake -B openblas-build -G Ninja OpenBLAS-0.3.29
 
-  config:
+  openblas-build:
     cmds:
-      - mkdir -p build
-      - cmake -B build -G Ninja ./OpenBLAS-0.3.29
+      - ninja -C openblas-build
 
-  build:
-    cmds:
-      - ninja -C build
-
-  patch:
+  openblas-patch:
     dir: OpenBLAS-0.3.29
     cmds:
       - patch -p 1 < ../patch/0001-Fix-function-prototypes.patch
       - patch -p 1 < ../patch/0002-Fix-empty-prototypes-of-select-selctg.patch
 
-  release:
+  openblas-release:
     cmds:
       - tar -czvf OpenBLAS-0.3.29-patched.tar.gz OpenBLAS-0.3.29
+      - sha256sum OpenBLAS-0.3.29-patched.tar.gz
+
+  yaml-cpp-config:
+    cmds:
+      - mkdir -p yaml-cpp-build
+      - cmake3 -B yaml-cpp-build -G Ninja yaml-cpp-0.8.0
+
+  yaml-cpp-build:
+    cmds:
+      - ninja -C yaml-cpp-build
+
+  yaml-cpp-patch:
+    dir: yaml-cpp-0.8.0
+    cmds:
+      - patch -p 1 < ../patch/0001-emitterutils-Explicitly-include-cstdint.patch
+
+  yaml-cpp-release:
+    cmds:
+      - tar -czvf yaml-cpp-0.8.0-patched.tar.gz yaml-cpp-0.8.0
+      - sha256sum yaml-cpp-0.8.0-patched.tar.gz
