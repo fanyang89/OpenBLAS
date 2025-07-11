@@ -1,0 +1,25 @@
+From ebbe682f7d6cd841746878e947a5717f6e1b2c86 Mon Sep 17 00:00:00 2001
+From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
+Date: Sat, 10 May 2025 08:38:06 -0700
+Subject: [PATCH] Fix function prototypes
+
+---
+ ctest/c_cblat1c.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ctest/c_cblat1c.c b/ctest/c_cblat1c.c
+index d9a539097..a98cfdc31 100644
+--- a/ctest/c_cblat1c.c
++++ b/ctest/c_cblat1c.c
+@@ -440,7 +440,7 @@ static real c_b43 = (float)1.;
+     extern /* Subroutine */ int ctest_(integer*, complex*, complex*, complex*, real*);
+     static complex mwpcs[5], mwpct[5];
+     extern /* Subroutine */ int itest1_(integer*, integer*), stest1_(real*,real*,real*,real*);
+-    extern /* Subroutine */ int cscaltest_(), itest1_(), stest1_();
++    extern /* Subroutine */ int cscaltest_(integer*, complex*, complex*, integer*);
+     static complex cx[8];
+     extern real scnrm2test_(integer*, complex*, integer*);
+     static integer np1;
+-- 
+2.50.1
+

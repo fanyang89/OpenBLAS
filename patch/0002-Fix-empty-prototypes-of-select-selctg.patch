@@ -1,0 +1,326 @@
+From 0d69a2930d9b31dbc343e3c7dfc725714d809abe Mon Sep 17 00:00:00 2001
+From: Martin Kroeker <martin@ruby.chemie.uni-freiburg.de>
+Date: Sat, 10 May 2025 08:39:57 -0700
+Subject: [PATCH] Fix empty prototypes of select/selctg
+
+---
+ lapack-netlib/SRC/cgees.c  | 4 ++--
+ lapack-netlib/SRC/cgeesx.c | 4 ++--
+ lapack-netlib/SRC/cgges.c  | 4 ++--
+ lapack-netlib/SRC/cgges3.c | 4 ++--
+ lapack-netlib/SRC/cggesx.c | 4 ++--
+ lapack-netlib/SRC/dgees.c  | 2 +-
+ lapack-netlib/SRC/dgeesx.c | 2 +-
+ lapack-netlib/SRC/dgges.c  | 4 ++--
+ lapack-netlib/SRC/dgges3.c | 4 ++--
+ lapack-netlib/SRC/dggesx.c | 4 ++--
+ lapack-netlib/SRC/sgees.c  | 2 +-
+ lapack-netlib/SRC/sgeesx.c | 2 +-
+ lapack-netlib/SRC/sgges.c  | 4 ++--
+ lapack-netlib/SRC/sgges3.c | 4 ++--
+ lapack-netlib/SRC/sggesx.c | 4 ++--
+ lapack-netlib/SRC/zgees.c  | 4 ++--
+ lapack-netlib/SRC/zgeesx.c | 4 ++--
+ lapack-netlib/SRC/zgges.c  | 5 +++--
+ lapack-netlib/SRC/zgges3.c | 5 +++--
+ lapack-netlib/SRC/zggesx.c | 5 +++--
+ 20 files changed, 39 insertions(+), 36 deletions(-)
+
+diff --git a/lapack-netlib/SRC/cgees.c b/lapack-netlib/SRC/cgees.c
+index 9145dc659..fca00f74f 100644
+--- a/lapack-netlib/SRC/cgees.c
++++ b/lapack-netlib/SRC/cgees.c
+@@ -710,8 +710,8 @@ or GE matrices</b> */
+ /* > \ingroup complexGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void cgees_(char *jobvs, char *sort, L_fp select, integer *n, 
+-	complex *a, integer *lda, integer *sdim, complex *w, complex *vs, 
++/* Subroutine */ void cgees_(char *jobvs, char *sort, logical (*select)(complex*),
++	integer *n, complex *a, integer *lda, integer *sdim, complex *w, complex *vs, 
+ 	integer *ldvs, complex *work, integer *lwork, real *rwork, logical *
+ 	bwork, integer *info)
+ {
+diff --git a/lapack-netlib/SRC/cgeesx.c b/lapack-netlib/SRC/cgeesx.c
+index b4c408ce4..7b2a0e5b0 100644
+--- a/lapack-netlib/SRC/cgeesx.c
++++ b/lapack-netlib/SRC/cgeesx.c
+@@ -752,8 +752,8 @@ f"> */
+ /* > \ingroup complexGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void cgeesx_(char *jobvs, char *sort, L_fp select, char *
+-	sense, integer *n, complex *a, integer *lda, integer *sdim, complex *
++/* Subroutine */ void cgeesx_(char *jobvs, char *sort, logical (*select)(complex*),
++	char *sense, integer *n, complex *a, integer *lda, integer *sdim, complex *
+ 	w, complex *vs, integer *ldvs, real *rconde, real *rcondv, complex *
+ 	work, integer *lwork, real *rwork, logical *bwork, integer *info)
+ {
+diff --git a/lapack-netlib/SRC/cgges.c b/lapack-netlib/SRC/cgges.c
+index ade0a3816..14350f7e3 100644
+--- a/lapack-netlib/SRC/cgges.c
++++ b/lapack-netlib/SRC/cgges.c
+@@ -784,8 +784,8 @@ or GE matrices</b> */
+ /* > \ingroup complexGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void cgges_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, integer *n, complex *a, integer *lda, complex *b, integer *
++/* Subroutine */ void cgges_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(complex*,complex*), integer *n, complex *a, integer *lda, complex *b, integer *
+ 	ldb, integer *sdim, complex *alpha, complex *beta, complex *vsl, 
+ 	integer *ldvsl, complex *vsr, integer *ldvsr, complex *work, integer *
+ 	lwork, real *rwork, logical *bwork, integer *info)
+diff --git a/lapack-netlib/SRC/cgges3.c b/lapack-netlib/SRC/cgges3.c
+index 4cc9411a0..edc9e1b2d 100644
+--- a/lapack-netlib/SRC/cgges3.c
++++ b/lapack-netlib/SRC/cgges3.c
+@@ -783,8 +783,8 @@ f"> */
+ /* > \ingroup complexGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void cgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, integer *n, complex *a, integer *lda, complex *b, integer *
++/* Subroutine */ void cgges3_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(complex*,complex*), integer *n, complex *a, integer *lda, complex *b, integer *
+ 	ldb, integer *sdim, complex *alpha, complex *beta, complex *vsl, 
+ 	integer *ldvsl, complex *vsr, integer *ldvsr, complex *work, integer *
+ 	lwork, real *rwork, logical *bwork, integer *info)
+diff --git a/lapack-netlib/SRC/cggesx.c b/lapack-netlib/SRC/cggesx.c
+index 375332cdb..ec6f4152c 100644
+--- a/lapack-netlib/SRC/cggesx.c
++++ b/lapack-netlib/SRC/cggesx.c
+@@ -843,8 +843,8 @@ f"> */
+ /* > \ingroup complexGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void cggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, char *sense, integer *n, complex *a, integer *lda, complex *b,
++/* Subroutine */ void cggesx_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(complex*,complex*), char *sense, integer *n, complex *a, integer *lda, complex *b,
+ 	 integer *ldb, integer *sdim, complex *alpha, complex *beta, complex *
+ 	vsl, integer *ldvsl, complex *vsr, integer *ldvsr, real *rconde, real 
+ 	*rcondv, complex *work, integer *lwork, real *rwork, integer *iwork, 
+diff --git a/lapack-netlib/SRC/dgees.c b/lapack-netlib/SRC/dgees.c
+index b97c66575..0dd6547a8 100644
+--- a/lapack-netlib/SRC/dgees.c
++++ b/lapack-netlib/SRC/dgees.c
+@@ -729,7 +729,7 @@ or GE matrices</b> */
+ /* > \ingroup doubleGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void dgees_(char *jobvs, char *sort, L_fp select, integer *n, 
++/* Subroutine */ void dgees_(char *jobvs, char *sort, logical(*select)(doublereal*,doublereal*), integer *n, 
+ 	doublereal *a, integer *lda, integer *sdim, doublereal *wr, 
+ 	doublereal *wi, doublereal *vs, integer *ldvs, doublereal *work, 
+ 	integer *lwork, logical *bwork, integer *info)
+diff --git a/lapack-netlib/SRC/dgeesx.c b/lapack-netlib/SRC/dgeesx.c
+index 5fa122ab6..8fba5454d 100644
+--- a/lapack-netlib/SRC/dgeesx.c
++++ b/lapack-netlib/SRC/dgeesx.c
+@@ -793,7 +793,7 @@ f"> */
+ /* > \ingroup doubleGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void dgeesx_(char *jobvs, char *sort, L_fp select, char *
++/* Subroutine */ void dgeesx_(char *jobvs, char *sort, logical(*select)(doublereal*,doublereal*), char *
+ 	sense, integer *n, doublereal *a, integer *lda, integer *sdim, 
+ 	doublereal *wr, doublereal *wi, doublereal *vs, integer *ldvs, 
+ 	doublereal *rconde, doublereal *rcondv, doublereal *work, integer *
+diff --git a/lapack-netlib/SRC/dgges.c b/lapack-netlib/SRC/dgges.c
+index a7f24de4a..28b82731e 100644
+--- a/lapack-netlib/SRC/dgges.c
++++ b/lapack-netlib/SRC/dgges.c
+@@ -798,8 +798,8 @@ or GE matrices</b> */
+ /* > \ingroup doubleGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void dgges_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, integer *n, doublereal *a, integer *lda, doublereal *b, 
++/* Subroutine */ void dgges_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(selctg)(doublereal*, doublereal*, doublereal*), integer *n, doublereal *a, integer *lda, doublereal *b, 
+ 	integer *ldb, integer *sdim, doublereal *alphar, doublereal *alphai, 
+ 	doublereal *beta, doublereal *vsl, integer *ldvsl, doublereal *vsr, 
+ 	integer *ldvsr, doublereal *work, integer *lwork, logical *bwork, 
+diff --git a/lapack-netlib/SRC/dgges3.c b/lapack-netlib/SRC/dgges3.c
+index 8e1139349..28b4ace5c 100644
+--- a/lapack-netlib/SRC/dgges3.c
++++ b/lapack-netlib/SRC/dgges3.c
+@@ -796,8 +796,8 @@ f"> */
+ /* > \ingroup doubleGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void dgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, integer *n, doublereal *a, integer *lda, doublereal *b, 
++/* Subroutine */ void dgges3_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(doublereal*,doublereal*,doublereal*), integer *n, doublereal *a, integer *lda, doublereal *b, 
+ 	integer *ldb, integer *sdim, doublereal *alphar, doublereal *alphai, 
+ 	doublereal *beta, doublereal *vsl, integer *ldvsl, doublereal *vsr, 
+ 	integer *ldvsr, doublereal *work, integer *lwork, logical *bwork, 
+diff --git a/lapack-netlib/SRC/dggesx.c b/lapack-netlib/SRC/dggesx.c
+index 3f5f6cd17..be19607c4 100644
+--- a/lapack-netlib/SRC/dggesx.c
++++ b/lapack-netlib/SRC/dggesx.c
+@@ -878,8 +878,8 @@ f"> */
+ /* > \endverbatim */
+ /* > */
+ /*  ===================================================================== */
+-/* Subroutine */ void dggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, char *sense, integer *n, doublereal *a, integer *lda, 
++/* Subroutine */ void dggesx_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(doublereal*,doublereal*,doublereal*), char *sense, integer *n, doublereal *a, integer *lda, 
+ 	doublereal *b, integer *ldb, integer *sdim, doublereal *alphar, 
+ 	doublereal *alphai, doublereal *beta, doublereal *vsl, integer *ldvsl,
+ 	 doublereal *vsr, integer *ldvsr, doublereal *rconde, doublereal *
+diff --git a/lapack-netlib/SRC/sgees.c b/lapack-netlib/SRC/sgees.c
+index 99529f13d..18d0f27b0 100644
+--- a/lapack-netlib/SRC/sgees.c
++++ b/lapack-netlib/SRC/sgees.c
+@@ -482,7 +482,7 @@ or GE matrices</b> */
+ /* > \ingroup realGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void sgees_(char *jobvs, char *sort, L_fp select, integer *n, 
++/* Subroutine */ void sgees_(char *jobvs, char *sort, logical(*select)(real*,real*), integer *n, 
+ 	real *a, integer *lda, integer *sdim, real *wr, real *wi, real *vs, 
+ 	integer *ldvs, real *work, integer *lwork, logical *bwork, integer *
+ 	info)
+diff --git a/lapack-netlib/SRC/sgeesx.c b/lapack-netlib/SRC/sgeesx.c
+index 87f77ddd0..1d61f9c28 100644
+--- a/lapack-netlib/SRC/sgeesx.c
++++ b/lapack-netlib/SRC/sgeesx.c
+@@ -550,7 +550,7 @@ f"> */
+ /* > \ingroup realGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void sgeesx_(char *jobvs, char *sort, L_fp select, char *
++/* Subroutine */ void sgeesx_(char *jobvs, char *sort, logical(*select)(real*,real*), char *
+ 	sense, integer *n, real *a, integer *lda, integer *sdim, real *wr, 
+ 	real *wi, real *vs, integer *ldvs, real *rconde, real *rcondv, real *
+ 	work, integer *lwork, integer *iwork, integer *liwork, logical *bwork,
+diff --git a/lapack-netlib/SRC/sgges.c b/lapack-netlib/SRC/sgges.c
+index 60a6d9348..b7c7691a9 100644
+--- a/lapack-netlib/SRC/sgges.c
++++ b/lapack-netlib/SRC/sgges.c
+@@ -555,8 +555,8 @@ or GE matrices</b> */
+ /* > \ingroup realGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void sgges_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, integer *n, real *a, integer *lda, real *b, integer *ldb, 
++/* Subroutine */ void sgges_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(real*,real*,real*), integer *n, real *a, integer *lda, real *b, integer *ldb, 
+ 	integer *sdim, real *alphar, real *alphai, real *beta, real *vsl, 
+ 	integer *ldvsl, real *vsr, integer *ldvsr, real *work, integer *lwork,
+ 	 logical *bwork, integer *info)
+diff --git a/lapack-netlib/SRC/sgges3.c b/lapack-netlib/SRC/sgges3.c
+index aefdda168..af99fb2fa 100644
+--- a/lapack-netlib/SRC/sgges3.c
++++ b/lapack-netlib/SRC/sgges3.c
+@@ -553,8 +553,8 @@ f"> */
+ /* > \ingroup realGEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void sgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, integer *n, real *a, integer *lda, real *b, integer *ldb, 
++/* Subroutine */ void sgges3_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(real*,real*,real*), integer *n, real *a, integer *lda, real *b, integer *ldb, 
+ 	integer *sdim, real *alphar, real *alphai, real *beta, real *vsl, 
+ 	integer *ldvsl, real *vsr, integer *ldvsr, real *work, integer *lwork,
+ 	 logical *bwork, integer *info)
+diff --git a/lapack-netlib/SRC/sggesx.c b/lapack-netlib/SRC/sggesx.c
+index 72c798f35..7f60d4ae6 100644
+--- a/lapack-netlib/SRC/sggesx.c
++++ b/lapack-netlib/SRC/sggesx.c
+@@ -635,8 +635,8 @@ f"> */
+ /* > \endverbatim */
+ /* > */
+ /*  ===================================================================== */
+-/* Subroutine */ void sggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, char *sense, integer *n, real *a, integer *lda, real *b, 
++/* Subroutine */ void sggesx_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(real*,real*,real*), char *sense, integer *n, real *a, integer *lda, real *b, 
+ 	integer *ldb, integer *sdim, real *alphar, real *alphai, real *beta, 
+ 	real *vsl, integer *ldvsl, real *vsr, integer *ldvsr, real *rconde, 
+ 	real *rcondv, real *work, integer *lwork, integer *iwork, integer *
+diff --git a/lapack-netlib/SRC/zgees.c b/lapack-netlib/SRC/zgees.c
+index fea0f2573..eab6c7ba6 100644
+--- a/lapack-netlib/SRC/zgees.c
++++ b/lapack-netlib/SRC/zgees.c
+@@ -710,8 +710,8 @@ or GE matrices</b> */
+ /* > \ingroup complex16GEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void zgees_(char *jobvs, char *sort, L_fp select, integer *n, 
+-	doublecomplex *a, integer *lda, integer *sdim, doublecomplex *w, 
++/* Subroutine */ void zgees_(char *jobvs, char *sort, logical (*select)(doublecomplex*),
++	integer *n, doublecomplex *a, integer *lda, integer *sdim, doublecomplex *w, 
+ 	doublecomplex *vs, integer *ldvs, doublecomplex *work, integer *lwork,
+ 	 doublereal *rwork, logical *bwork, integer *info)
+ {
+diff --git a/lapack-netlib/SRC/zgeesx.c b/lapack-netlib/SRC/zgeesx.c
+index 3749c53e5..bb5b6e164 100644
+--- a/lapack-netlib/SRC/zgeesx.c
++++ b/lapack-netlib/SRC/zgeesx.c
+@@ -751,8 +751,8 @@ f"> */
+ /* > \ingroup complex16GEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void zgeesx_(char *jobvs, char *sort, L_fp select, char *
+-	sense, integer *n, doublecomplex *a, integer *lda, integer *sdim, 
++/* Subroutine */ void zgeesx_(char *jobvs, char *sort, logical (*select)(doublecomplex*),
++	char * sense, integer *n, doublecomplex *a, integer *lda, integer *sdim, 
+ 	doublecomplex *w, doublecomplex *vs, integer *ldvs, doublereal *
+ 	rconde, doublereal *rcondv, doublecomplex *work, integer *lwork, 
+ 	doublereal *rwork, logical *bwork, integer *info)
+diff --git a/lapack-netlib/SRC/zgges.c b/lapack-netlib/SRC/zgges.c
+index aab716add..f8426519d 100644
+--- a/lapack-netlib/SRC/zgges.c
++++ b/lapack-netlib/SRC/zgges.c
+@@ -784,8 +784,9 @@ or GE matrices</b> */
+ /* > \ingroup complex16GEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void zgges_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, 
++/* Subroutine */ void zgges_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(doublecomplex*,doublecomplex*), integer *n, doublecomplex *a,
++       	integer *lda, doublecomplex *b, 
+ 	integer *ldb, integer *sdim, doublecomplex *alpha, doublecomplex *
+ 	beta, doublecomplex *vsl, integer *ldvsl, doublecomplex *vsr, integer 
+ 	*ldvsr, doublecomplex *work, integer *lwork, doublereal *rwork, 
+diff --git a/lapack-netlib/SRC/zgges3.c b/lapack-netlib/SRC/zgges3.c
+index 98149dabe..d0329ab0b 100644
+--- a/lapack-netlib/SRC/zgges3.c
++++ b/lapack-netlib/SRC/zgges3.c
+@@ -783,8 +783,9 @@ f"> */
+ /* > \ingroup complex16GEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void zgges3_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, integer *n, doublecomplex *a, integer *lda, doublecomplex *b, 
++/* Subroutine */ void zgges3_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(doublecomplex*,doublecomplex*), integer *n, doublecomplex *a,
++       	integer *lda, doublecomplex *b, 
+ 	integer *ldb, integer *sdim, doublecomplex *alpha, doublecomplex *
+ 	beta, doublecomplex *vsl, integer *ldvsl, doublecomplex *vsr, integer 
+ 	*ldvsr, doublecomplex *work, integer *lwork, doublereal *rwork, 
+diff --git a/lapack-netlib/SRC/zggesx.c b/lapack-netlib/SRC/zggesx.c
+index fa4c5bd8d..3b621a0d2 100644
+--- a/lapack-netlib/SRC/zggesx.c
++++ b/lapack-netlib/SRC/zggesx.c
+@@ -843,8 +843,9 @@ f"> */
+ /* > \ingroup complex16GEeigen */
+ 
+ /*  ===================================================================== */
+-/* Subroutine */ void zggesx_(char *jobvsl, char *jobvsr, char *sort, L_fp 
+-	selctg, char *sense, integer *n, doublecomplex *a, integer *lda, 
++/* Subroutine */ void zggesx_(char *jobvsl, char *jobvsr, char *sort, logical 
++	(*selctg)(doublecomplex*,doublecomplex*), char *sense, integer *n,
++       	doublecomplex *a, integer *lda, 
+ 	doublecomplex *b, integer *ldb, integer *sdim, doublecomplex *alpha, 
+ 	doublecomplex *beta, doublecomplex *vsl, integer *ldvsl, 
+ 	doublecomplex *vsr, integer *ldvsr, doublereal *rconde, doublereal *
+-- 
+2.50.1
+
