@@ -1,0 +1,16 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - task: config
+      - task: build
+
+  config:
+    cmds:
+      - mkdir -p build
+      - cmake -B build -G Ninja ./OpenBLAS-0.3.29
+
+  build:
+    cmds:
+      - ninja -C build
