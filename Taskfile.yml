@@ -20,3 +20,7 @@ tasks:
     cmds:
       - patch -p 1 < ../patch/0001-Fix-function-prototypes.patch
       - patch -p 1 < ../patch/0002-Fix-empty-prototypes-of-select-selctg.patch
+
+  release:
+    cmds:
+      - tar -czvf OpenBLAS-0.3.29-patched.tar.gz OpenBLAS-0.3.29
